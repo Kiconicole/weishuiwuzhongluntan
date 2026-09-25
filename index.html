@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>渭水五中校园论坛</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Microsoft YaHei",sans-serif;}
+body{background:#f5f7fa;color:#222;line-height:1.55;}
+
+/* 顶部用户栏 */
+.user-bar{
+    max-width:960px;
+    margin:14px auto 0;
+    text-align:right;
+    font-size:13px;
+    color:#666;
+}
+.user-bar a{
+    color:#4a6fa5;
+    text-decoration:none;
+    margin-left:12px;
+}
+.user-bar a:hover{text-decoration:underline;}
+
+/* 头部标题+搜索 */
+.header-wrap{
+    max-width:960px;
+    margin:6px auto 0;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:14px 20px;
+    background:#ffffff;
+    border:1px solid #d9dfe6;
+    border-bottom:none;
+}
+.site-title h1{
+    font-size:22px;
+    color:#33475b;
+    font-weight:600;
+}
+.site-desc{font-size:13px;color:#777;margin-top:4px;}
+.head-search{display:flex;gap:6px;}
+.head-search input{
+    width:260px;
+    padding:7px 10px;
+    border:1px solid #c9d1da;
+    border-radius:4px;
+    outline:none;
+    font-size:14px;
+    background:#fafbfc;
+}
+.head-search button{
+    padding:7px 14px;
+    background:#5b7a99;
+    color:#fff;
+    border:none;
+    border-radius:4px;
+    cursor:pointer;
+}
+
+/* 主体：左导航 + 右内容 */
+.main-container{
+    max-width:960px;
+    margin:0 auto 30px;
+    display:grid;
+    grid-template-columns:200px 1fr;
+    gap:0;
+}
+
+/* 左侧边栏 */
+.left-sidebar{
+    background:#ffffff;
+    border:1px solid #d9dfe6;
+    border-right:none;
+    padding:16px 12px;
+}
+.side-block{margin-bottom:20px;}
+.side-block h3{
+    font-size:14px;
+    color:#33475b;
+    padding-bottom:6px;
+    border-bottom:1px solid #e4e8ed;
+    margin-bottom:10px;
+}
+.nav-item{
+    padding:7px 6px;
+    cursor:pointer;
+    font-size:14px;
+    color:#444;
+    border-radius:3px;
+}
+.nav-item:hover{background:#eef2f7;}
+.nav-item.active{background:#dce4ee;color:#2f5572;font-weight:500;}
+.online-stat{
+    font-size:12px;
+    color:#777;
+    padding-top:10px;
+    border-top:1px dashed #e4e8ed;
+}
+
+/* 右侧主内容区 */
+.content-area{
+    background:#ffffff;
+    border:1px solid #d9dfe6;
+    padding:16px;
+}
+
+/* Banner 加大 */
+.banner{
+    width:100%;
+    height:180px;
+    border:1px solid #cfd7e0;
+    border-radius:4px;
+    margin-bottom:14px;
+    overflow:hidden;
+}
+.banner img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+}
+
+.alert-bar{
+    background:#f1f4f8;
+    border:1px solid #d9e0e8;
+    border-radius:4px;
+    padding:8px 12px;
+    font-size:13px;
+    color:#445566;
+    margin-bottom:14px;
+}
+.search-tip{
+    color:#b54747;
+    font-size:14px;
+    margin-bottom:8px;
+    display:none;
+}
+
+/* 帖子卡片：统一高度基线 */
+.post-card{
+    border:1px solid #e4e8ed;
+    border-radius:4px;
+    padding:14px;
+    margin-bottom:10px;
+    cursor:pointer;
+    background:#fcfdfd;
+    transition:background 0.15s;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    min-height:78px;
+}
+.post-card:hover{background:#f4f7fb;}
+.post-head{
+    display:flex;
+    gap:8px;
+    align-items:center;
+    margin-bottom:8px;
+}
+.tag-stick{font-size:11px;background:#b54747;color:#fff;padding:2px 6px;border-radius:3px;}
+.tag-good{font-size:11px;background:#4a6fa5;color:#fff;padding:2px 6px;border-radius:3px;}
+.tag-normal{font-size:11px;background:#eef1f4;color:#555;padding:2px 6px;border-radius:3px;}
+.post-title-text{font-size:16px;color:#222;line-height:1.4;}
+.post-meta{
+    display:flex;
+    justify-content:space-between;
+    font-size:13px;
+    color:#777;
+    margin-top:auto;
+}
+
+/* 底部版主信息 */
+.footer-info{
+    margin-top:18px;
+    padding-top:10px;
+    border-top:1px dashed #e4e8ed;
+    font-size:12px;
+    color:#777;
+}
+
+/* 分页样式 */
+.pagination{
+    margin-top:20px;
+    text-align:center;
+    font-size:18px;
+}
+.pagination span{
+    display:inline-block;
+    margin:0 4px;
+    cursor:pointer;
+    color:#335588;
+}
+.pagination span.current{
+    color:#dd2222;
+    font-weight:bold;
+    cursor:default;
+}
+.pagination span.dots{
+    cursor:default;
+}
+</style>
+</head>
+<body>
+
+<div class="user-bar">
+    欢迎回来，今日晴
+    <a href="#">个人主页</a>
+    <a href="#">退出登录</a>
+    <a href="#">社区帮助</a>
+</div>
+
+<div class="header-wrap">
+    <div class="site-title">
+        <h1>渭水五中校园论坛</h1>
+        <div class="site-desc">校内师生交流讨论区</div>
+    </div>
+    <div class="head-search">
+        <input id="search-input" placeholder="输入关键词搜索帖子">
+        <button id="search-btn">搜索</button>
+    </div>
+</div>
+
+<div class="main-container">
+    <div class="left-sidebar">
+        <div class="side-block">
+            <h3>讨论板块</h3>
+            <div class="nav-item active" data-board="daily">日常闲聊</div>
+            <div class="nav-item" data-board="wall">校园墙墙</div>
+            <div class="nav-item" data-board="notice">校园公告</div>
+            <div class="nav-item" data-board="counsel">心理咨询部</div>
+        </div>
+        <div class="online-stat">
+            当前在线：3人
+        </div>
+    </div>
+
+    <div class="content-area">
+        <div style="margin-bottom:14px;text-align:right;">
+    <button id="btnNewPost" style="
+        padding:7px 16px;
+        background:#4a6fa5;
+        color:#fff;
+        border:none;
+        border-radius:4px;
+        font-size:14px;
+        cursor:pointer;
+    ">发布新帖</button>
+</div>
+
+        <div class="banner">
+            <img src="banner.png" alt="渭水五中校园日落">
+        </div>
+
+        <div class="alert-bar">
+            快讯：中秋节通知｜食堂窗口调整｜心理部活动室开放时间更新
+        </div>
+
+        <div class="search-tip" id="search-tip">未找到相关帖子</div>
+        <div id="post-list"></div>
+
+        <div class="pagination" id="page-box"></div>
+
+        <div class="footer-info">
+            版主：渭水五中宣传部
+        </div>
+    </div>
+</div>
+
+<script>
+const boardLastPage = {
+    daily: 38,
+    life: 24,
+    notice: 12,
+    counsel: 14
+};
+let currentBoard = "daily";
+
+const postPool = {
+    daily:[
+        {fake:true,title:"学校食堂到底是个啥啊谁爱吃谁敢吃？",tag:"normal",author:"匿名同学",time:"09-20",comment:21,view:526,href:null},
+        {fake:true,title:"那个九年级的教辅咋那么贵啊",tag:"normal",author:"匿名同学",time:"09-21",comment:34,view:612,href:null},
+        {fake:true,title:"不不不我不要跑800（哭）",tag:"normal",author:"匿名同学",time:"09-22",comment:67,view:841,href:null},
+        {fake:true,title:"有没有这届初二5班还有高二7班的老大，黑板报画的很好看诶",tag:"good",author:"画画人才是老大",time:"09-23",comment:28,view:473,href:null},
+        {fake:true,title:"一些看不见的东西似乎会影响人的情绪",tag:"normal",author:"论坛用户0067",time:"09-23",comment:42,view:1089,href:null},
+        {fake:false,title:"上晚自习的各位小心，最近走廊的灯坏了",tag:"stick",author:"Ltx",time:"09-22",comment:13,view:453,href:"post_daily_01.html"},
+        {fake:true,title:"小卖部新的饮料有人尝过不？想try",tag:"normal",author:"喵喵大王ovo",time:"09-19",comment:16,view:241,href:null},
+        {fake:true,title:"同桌这个哈儿上课老和我发癫怎么办？",tag:"normal",author:"不处",time:"09-18",comment:49,view:902,href:null},
+        {fake:true,title:"这届七年级真是有福了",tag:"good",author:"老赵还我圣剑",time:"09-17",comment:73,view:1314,href:null},
+        {fake:true,title:"有谁是肖老师的学生吗，我是前年毕业的学姐来着",tag:"normal",author:"论坛用户0279",time:"09-16",comment:12,view:188,href:null}
+    ],
+    wall:[
+        {fake:true,title:"高三6班的wsy，我喜欢你！",tag:"normal",author:"匿名同学",time:"09-21",comment:41,view:668,href:null},
+        {fake:true,title:"实名举报初二9班李鑫",tag:"normal",author:"琪琪酱",time:"09-22",comment:58,view:794,href:null},
+        {fake:false,title:"听说新来的初一很混？",tag:"normal",author:"mj",time:"09-23",comment:26,view:517,href:null},
+        {fake:true,title:"有没有哪个高二学长学姐知道txr在哪个班",tag:"good",author:"小糖才是天使",time:"09-20",comment:62,view:1047,href:null},
+        {fake:true,title:"扩列画画入（爱心）",tag:"normal",author:"画画人才是老大",time:"09-19",comment:33,view:509,href:null},
+        {fake:true,title:"去年怎么没发现初二有这么帅的",tag:"normal",author:"恶魔用户0108",time:"09-18",comment:45,view:782,href:null},
+        {fake:true,title:"表白初二的李同学 很帅啊",tag:"normal",author:"angel",time:"09-17",comment:70,view:1236,href:null},
+        {fake:true,title:"初中部没哪个敢和8.5的ltx比高帅吧？",tag:"normal",author:"瑄瑄妹儿",time:"09-16",comment:27,view:385,href:null},
+        {fake:true,title:"表白22届毕业学长许久",tag:"normal",author:"匿名同学",time:"09-15",comment:19,view:293,href:null},
+        {fake:true,title:"哪个苕皮往老子花上扔垃圾",tag:"normal",author:"鱼鱼",time:"09-14",comment:36,view:612,href:null}
+    ],
+    notice:[
+        {fake:true,title:"中秋放假安排",tag:"stick",author:"渭水学生会",time:"09-18",comment:86,view:1432,href:null},
+        {fake:true,title:"图书馆开放时间更新",tag:"normal",author:"渭水图书馆",time:"09-20",comment:33,view:645,href:null},
+        {fake:false,title:"关于旧机房区域管理通告",tag:"good",author:"位7",time:"09-21",comment:47,view:816,href:"post_notice_01.html"},
+        {fake:true,title:"秋季传染病防控通知",tag:"normal",author:"渭水校医室",time:"09-19",comment:52,view:977,href:null},
+        {fake:true,title:"渭水五中初高中部26年度第一次月底测试时间安排",tag:"normal",author:"渭水德育处",time:"09-17",comment:24,view:366,href:null},
+        {fake:true,title:"校园学生会年度招新",tag:"good",author:"小时",time:"09-16",comment:14,view:204,href:null},
+        {fake:true,title:"五中与龙中共创的艺体周正在筹备啦",tag:"normal",author:"渭水艺体部",time:"09-15",comment:91,view:1740,href:null},
+        {fake:true,title:"本届区数学竞赛参赛招选",tag:"normal",author:"Maths He",time:"09-14",comment:38,view:721,href:null},
+        {fake:true,title:"校园论坛需要我们共同维护",tag:"normal",author:"渭水五中宣传部",time:"09-13",comment:56,view:1105,href:null},
+        {fake:true,title:"校园广播部招新通知",tag:"normal",author:"可可ai",time:"09-12",comment:17,view:288,href:null}
+    ],
+    counsel:[
+        {fake:true,title:"【官方置顶】心理咨询部须知",tag:"stick",author:"小孙老师",time:"2025-09-09",comment:38,view:954,href:null},
+        {fake:false,title:"【内部闲聊】心理咨询部成员轮岗感受汇总",tag:"good",author:"在下雯雯",time:"04-12",href:"post_counsel_01.html",comment:62,view:883},
+        {fake:true,title:"上年度优秀心理咨询师评选结果公布",tag:"good",author:"今日晴",time:"09-02",comment:24,view:538,href:null},
+        {fake:true,title:"心里装满了事情感觉堵得慌？有个小方法",tag:"good",author:"00熙",time:"09-21",comment:17,view:421,href:null},
+        {fake:true,title:"预约不到自己想要的咨询师咋办啊",tag:"normal",author:"泪",time:"09-18",comment:51,view:836,href:null},
+        {fake:true,title:"好喜欢这个邓琳熙小妹妹的辅导哦",tag:"normal",author:"喂喂喂",time:"09-17",comment:11,view:169,href:null},
+        {fake:true,title:"搞这个心咨部后感觉我们学校有点饭圈化了（？",tag:"normal",author:"匿名同学",time:"09-16",comment:29,view:474,href:null},
+        {fake:true,title:"作为长期光临的人员所做的一些心咨部成员的选择推荐",tag:"good",author:"ui",time:"09-15",comment:43,view:762,href:null},
+        {fake:true,title:"昨天预约了这个优秀心理咨询师，说说我的看法",tag:"normal",author:"匿名同学",time:"09-14",comment:37,view:648,href:null},
+        {fake:true,title:"预约表爆满了是何意味？",tag:"normal",author:"乖乖",time:"09-13",comment:22,view:391,href:null}
+    ]
+};
+
+const searchMap = {
+    "记忆碎片":"hidden_记忆碎片.html",
+    "旧伤疤":"hidden_旧伤疤.html",
+    "黑雾":"hidden_黑雾.html"
+};
+
+function renderPost(){
+    const list = postPool[currentBoard];
+    const container = document.getElementById("post-list");
+    let html = "";
+    list.forEach(post=>{
+        let tagHtml = "";
+        if(post.tag==="stick") tagHtml = `<span class="tag-stick">置顶</span>`;
+        else if(post.tag==="good") tagHtml = `<span class="tag-good">精华</span>`;
+        else tagHtml = `<span class="tag-normal">普通</span>`;
+        const clickCode = post.href ? `onclick="window.location.href='${post.href}'"` : `onclick="window.location.href='index.html'"`;
+        html += `
+<div class="post-card" ${clickCode}>
+    <div class="post-head">
+        ${tagHtml}
+        <span class="post-title-text">${post.title}</span>
+    </div>
+    <div class="post-meta">
+        <span>作者：${post.author} ${post.time}</span>
+        <span>评论：${post.comment} 阅读：${post.view}</span>
+    </div>
+</div>`;
+    })
+    container.innerHTML = html;
+}
+
+function renderPageBar(){
+    const last = boardLastPage[currentBoard];
+    const box = document.getElementById("page-box");
+    let pageHtml = `<span onclick="location.href='index.html'">上一页</span>`;
+
+    for(let i=1;i<=10;i++){
+        if(i===1){
+            pageHtml += `<span class="current" onclick="location.href='index.html'">${i}</span>`;
+        }else{
+            pageHtml += `<span onclick="location.href='index.html'">${i}</span>`;
+        }
+    }
+    pageHtml += `<span class="dots">……</span>`;
+    pageHtml += `<span onclick="location.href='index.html'">${last}</span>`;
+    pageHtml += `<span onclick="location.href='index.html'">下一页</span>`;
+    box.innerHTML = pageHtml;
+}
+
+document.querySelectorAll(".nav-item").forEach(el=>{
+    el.onclick = ()=>{
+        document.querySelectorAll(".nav-item").forEach(x=>x.classList.remove("active"));
+        el.classList.add("active");
+        currentBoard = el.dataset.board;
+        renderPost();
+        renderPageBar();
+    }
+})
+
+document.getElementById("search-btn").addEventListener("click",()=>{
+    const kw = document.getElementById("search-input").value.trim();
+    if(searchMap[kw]){
+        window.location.href = searchMap[kw];
+    }else{
+        const tip = document.getElementById("search-tip");
+        tip.style.display="block";
+        setTimeout(()=>tip.style.display="none",2200);
+    }
+});
+document.getElementById("search-input").addEventListener("keydown",e=>{
+    if(e.key === "Enter") document.getElementById("search-btn").click();
+});
+
+renderPost();
+renderPageBar();
+
+//发布新帖按钮
+document.getElementById('btnNewPost').addEventListener('click',function(){
+    alert("社区维修中，暂时无法发布新帖子");
+});
+
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>搜索结果｜渭水五中校园论坛</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Microsoft YaHei",sans-serif;}
+body{background:#f5f7fa;color:#222;line-height:1.55;}
+/* 顶部用户栏 */
+.user-bar{
+    max-width:960px;
+    margin:14px auto 0;
+    text-align:right;
+    font-size:13px;
+    color:#666;
+}
+.user-bar a{
+    color:#4a6fa5;
+    text-decoration:none;
+    margin-left:12px;
+}
+.user-bar a:hover{text-decoration:underline;}
+/* 头部标题 */
+.header-wrap{
+    max-width:960px;
+    margin:6px auto 0;
+    padding:14px 20px;
+    background:#ffffff;
+    border:1px solid #d9dfe6;
+}
+.site-title h1{
+    font-size:22px;
+    color:#33475b;
+    font-weight:600;
+}
+.site-desc{font-size:13px;color:#777;margin-top:4px;}
+/* 主体：去掉侧边栏，通栏内容 */
+.main-container{
+    max-width:960px;
+    margin:0 auto 30px;
+}
+.content-area{
+    background:#ffffff;
+    border:1px solid #d9dfe6;
+    padding:16px;
+}
+.back-link{
+    display:inline-block;
+    color:#4a6fa5;
+    text-decoration:none;
+    margin-bottom:12px;
+}
+.back-link:hover{text-decoration:underline;}
+.search-info{
+    font-size:14px;
+    color:#445566;
+    margin-bottom:16px;
+    padding-bottom:10px;
+    border-bottom:1px dashed #e4e8ed;
+}
+.search-keyword{
+    color:#b54747;
+    font-weight:bold;
+}
+.no-result{
+    padding:30px 0;
+    text-align:center;
+    color:#777;
+    font-size:15px;
+}
+/* 帖子卡片 和index完全一模一样 */
+.post-card{
+    border:1px solid #e4e8ed;
+    border-radius:4px;
+    padding:14px;
+    margin-bottom:10px;
+    cursor:pointer;
+    background:#fcfdfd;
+    transition:background 0.15s;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    min-height:78px;
+}
+.post-card:hover{background:#f4f7fb;}
+.post-head{
+    display:flex;
+    gap:8px;
+    align-items:center;
+    margin-bottom:8px;
+}
+.tag-stick{font-size:11px;background:#b54747;color:#fff;padding:2px 6px;border-radius:3px;}
+.tag-good{font-size:11px;background:#4a6fa5;color:#fff;padding:2px 6px;border-radius:3px;}
+.tag-normal{font-size:11px;background:#eef1f4;color:#555;padding:2px 6px;border-radius:3px;}
+.post-title-text{font-size:16px;color:#222;line-height:1.4;}
+.post-meta{
+    display:flex;
+    justify-content:space-between;
+    font-size:13px;
+    color:#777;
+    margin-top:auto;
+}
+.footer-info{
+    margin-top:18px;
+    padding-top:10px;
+    border-top:1px dashed #e4e8ed;
+    font-size:12px;
+    color:#777;
+}
+</style>
+</head>
+<body>
+<div class="user-bar">
+    欢迎回来，今日晴
+    <a href="index.html">个人主页</a>
+    <a href="index.html">退出登录</a>
+    <a href="index.html">社区帮助</a>
+</div>
+<div class="header-wrap">
+    <div class="site-title">
+        <h1>渭水五中校园论坛</h1>
+        <div class="site-desc">搜索结果页面</div>
+    </div>
+</div>
+<div class="main-container">
+    <div class="content-area">
+        <a class="back-link" href="index.html">← 返回论坛首页</a>
+        <div class="search-info">
+            搜索关键词：<span class="search-keyword" id="kwSpan"></span>
+        </div>
+        <div id="resultWrap"></div>
+        <div class="footer-info">
+            版主：渭水五中宣传部
+        </div>
+    </div>
+</div>
+
+<script>
+// 和index完全同步的帖子池数据
+const postPool = {
+    daily:[{fake:true,title:"预约表爆满了是何意味？",tag:"normal",author:"乖乖",time:"09-13",comment:22,view:391,href:null}
+    ]
+};
+const searchMap = {
+    "记忆碎片":"hidden_记忆碎片.html",
+    "旧伤疤":"hidden_旧伤疤.html",
+    "黑雾":"hidden_黑雾.html"
+};
+
+// 把全部板块帖子合并成一维数组
+let allPosts = [];
+Object.values(postPool).forEach(boardArr=>{
+    allPosts = allPosts.concat(boardArr);
+})
+
+// 获取url参数q
+const urlObj = new URL(location.href);
+const q = urlObj.searchParams.get("q") || "";
+document.getElementById("kwSpan").textContent = q;
+
+// 特殊关键词优先跳转
+if(searchMap[q]){
+    location.href = searchMap[q];
+}
+
+// 过滤：标题、作者匹配，忽略大小写
+const kw = q.toLowerCase();
+const filterPosts = allPosts.filter(p=>{
+    const text = (p.title + " " + p.author).toLowerCase();
+    return text.includes(kw);
+})
+
+const wrap = document.getElementById("resultWrap");
+if(filterPosts.length === 0){
+    wrap.innerHTML = `<div class="no-result">没有搜索到匹配的帖子，请尝试别的关键词。</div>`;
+}else{
+    let html = "";
+    filterPosts.forEach(post=>{
+        let tagHtml = "";
+        if(post.tag==="stick") tagHtml = `<span class="tag-stick">置顶</span>`;
+        else if(post.tag==="good") tagHtml = `<span class="tag-good">精华</span>`;
+        else tagHtml = `<span class="tag-normal">普通</span>`;
+        const clickCode = post.href ? `onclick="window.location.href='${post.href}'"` : `onclick="window.location.href='index.html'"`;
+        html += `
+<div class="post-card" ${clickCode}>
+    <div class="post-head">
+        ${tagHtml}
+        <span class="post-title-text">${post.title}</span>
+    </div>
+    <div class="post-meta">
+        <span>作者：${post.author} ${post.time}</span>
+        <span>评论：${post.comment} 阅读：${post.view}</span>
+    </div>
+</div>`;
+    })
+    wrap.innerHTML = html;
+}
+</script>
+</body>
+</html>
+
